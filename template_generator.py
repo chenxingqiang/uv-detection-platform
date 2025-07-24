@@ -4,7 +4,7 @@
 自动替换模板中的变量，生成具体的提示词
 """
 
-import yaml
+import json
 import re
 from pathlib import Path
 from typing import Dict, Any
@@ -30,14 +30,17 @@ class TemplateGenerator:
             return ""
     
     def load_variables(self, config_file: str) -> Dict[str, Any]:
-        """从YAML配置文件加载变量"""
+        """从JSON配置文件加载变量"""
         try:
             with open(config_file, 'r', encoding='utf-8') as f:
-                self.variables = yaml.safe_load(f)
+                self.variables = json.load(f)
             print(f"✅ 成功加载变量配置: {config_file}")
             return self.variables
         except FileNotFoundError:
             print(f"❌ 配置文件未找到: {config_file}")
+            return {}
+        except json.JSONDecodeError as e:
+            print(f"❌ 配置文件格式错误: {e}")
             return {}
     
     def extract_variables(self) -> set:
@@ -49,7 +52,7 @@ class TemplateGenerator:
             print(f"   - ${{{var}}}")
         return variables
     
-    def generate_config_template(self, output_file: str = "project_config.yaml"):
+    def generate_config_template(self, output_file: str = "project_config.json"):
         """生成配置文件模板"""
         variables = self.extract_variables()
         
@@ -64,24 +67,25 @@ class TemplateGenerator:
             "样式配置": ["主字体名称", "无衬线字体名称", "等宽字体名称", "代码背景色"]
         }
         
-        config_content = "# 项目配置文件\n# 请根据具体项目需求填写以下变量\n\n"
+        config_data = {
+            "_comment": "项目配置文件 - 请根据具体项目需求填写以下变量"
+        }
         
         for category, var_list in categories.items():
-            config_content += f"# {category}\n"
+            config_data[f"_comment_{category}"] = f"=== {category} ==="
             for var in var_list:
                 if var in variables:
-                    config_content += f'{var}: "请填写{var}"\n'
-            config_content += "\n"
+                    config_data[var] = f"请填写{var}"
         
         # 添加其他未分类的变量
         uncategorized = variables - set(sum(categories.values(), []))
         if uncategorized:
-            config_content += "# 其他变量\n"
+            config_data["_comment_其他"] = "=== 其他变量 ==="
             for var in sorted(uncategorized):
-                config_content += f'{var}: "请填写{var}"\n'
+                config_data[var] = f"请填写{var}"
         
         with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(config_content)
+            json.dump(config_data, f, ensure_ascii=False, indent=2)
         
         print(f"📝 已生成配置模板: {output_file}")
         return output_file
