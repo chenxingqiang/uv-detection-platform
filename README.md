@@ -86,6 +86,19 @@ pandoc plan.md \
   --variable=monofont="Monaco" \
   --listings \
   -o 技术方案_专业版.pdf
+
+# 表格完美版（最终版本）
+pandoc plan.md \
+  --filter pandoc-mermaid \
+  --pdf-engine=xelatex \
+  --number-sections \
+  --variable=graphics:yes \
+  --variable=geometry:margin=2cm \
+  --variable=CJKmainfont="Source Han Serif SC" \
+  --variable=CJKsansfont="Source Han Sans SC" \
+  --variable=monofont="Monaco" \
+  --listings \
+  -o 技术方案_表格完美版.pdf
 ```
 
 ## 🎯 通用模板使用
