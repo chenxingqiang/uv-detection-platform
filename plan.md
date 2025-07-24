@@ -88,76 +88,96 @@ header-includes:
       fontsize=\footnotesize
     }
     
-    % JSON代码块环境
-    \lstnewenvironment{jsoncode}{
-      \lstset{
-        language=,
-        basicstyle=\footnotesize\ttfamily,
-        backgroundcolor=\color{jsonbg},
-        frame=single,
-        frameround=tttt,
-        framerule=1pt,
-        rulecolor=\color{codeframe},
-        breaklines=true,
-        breakatwhitespace=true,
-        xleftmargin=8pt,
-        xrightmargin=8pt,
-        aboveskip=10pt,
-        belowskip=10pt,
-        showstringspaces=false
-      }
-    }{}
+    % 配置listings包的全局样式
+    \lstset{
+      basicstyle=\footnotesize\ttfamily,
+      frame=single,
+      frameround=tttt,
+      framerule=1pt,
+      rulecolor=\color{codeframe},
+      breaklines=true,
+      breakatwhitespace=true,
+      xleftmargin=8pt,
+      xrightmargin=8pt,
+      aboveskip=10pt,
+      belowskip=10pt,
+      showstringspaces=false,
+      backgroundcolor=\color{codebg}
+    }
     
-    % SQL代码块环境
-    \lstnewenvironment{sqlcode}{
-      \lstset{
-        language=SQL,
-        basicstyle=\footnotesize\ttfamily,
-        backgroundcolor=\color{sqlbg},
-        frame=single,
-        frameround=tttt,
-        framerule=1pt,
-        rulecolor=\color{codeframe},
-        breaklines=true,
-        breakatwhitespace=true,
-        xleftmargin=8pt,
-        xrightmargin=8pt,
-        aboveskip=10pt,
-        belowskip=10pt,
-        showstringspaces=false,
-        keywordstyle=\color{blue}\bfseries,
-        commentstyle=\color{gray},
-        stringstyle=\color{red}
-      }
-    }{}
+    % 为不同语言定义特定的样式
+    \lstdefinestyle{jsonstyle}{
+      language=,
+      backgroundcolor=\color{jsonbg},
+      basicstyle=\footnotesize\ttfamily,
+      frame=single,
+      frameround=tttt,
+      framerule=1pt,
+      rulecolor=\color{codeframe}
+    }
     
-    % Python代码块环境
-    \lstnewenvironment{pythoncode}{
-      \lstset{
-        language=Python,
-        basicstyle=\footnotesize\ttfamily,
-        backgroundcolor=\color{pythonbg},
-        frame=single,
-        frameround=tttt,
-        framerule=1pt,
-        rulecolor=\color{codeframe},
-        breaklines=true,
-        breakatwhitespace=true,
-        xleftmargin=8pt,
-        xrightmargin=8pt,
-        aboveskip=10pt,
-        belowskip=10pt,
-        showstringspaces=false,
-        keywordstyle=\color{blue}\bfseries,
-        commentstyle=\color{gray},
-        stringstyle=\color{red}
-      }
-    }{}
+    \lstdefinestyle{sqlstyle}{
+      language=SQL,
+      backgroundcolor=\color{sqlbg},
+      basicstyle=\footnotesize\ttfamily,
+      frame=single,
+      frameround=tttt,
+      framerule=1pt,
+      rulecolor=\color{codeframe},
+      keywordstyle=\color{blue}\bfseries,
+      commentstyle=\color{gray},
+      stringstyle=\color{red}
+    }
+    
+    \lstdefinestyle{pythonstyle}{
+      language=Python,
+      backgroundcolor=\color{pythonbg},
+      basicstyle=\footnotesize\ttfamily,
+      frame=single,
+      frameround=tttt,
+      framerule=1pt,
+      rulecolor=\color{codeframe},
+      keywordstyle=\color{blue}\bfseries,
+      commentstyle=\color{gray},
+      stringstyle=\color{red}
+    }
+    
+    % 为Pandoc生成的代码块设置语言映射
+    \lstdefinelanguage{jsonc}{
+      morestring=[b]",
+      morestring=[b]',
+      backgroundcolor=\color{jsonbg}
+    }
+    
+    % 设置特定语言的默认样式
+    \lstset{
+      language=,
+      backgroundcolor=\color{codebg}
+    }
+    
+    % 当遇到特定语言时使用对应样式
+    \lstset{
+      language=SQL,
+      style=sqlstyle
+    }
+    
+    \lstset{
+      language=Python,
+      style=pythonstyle
+    }
+    
+    \lstset{
+      language=jsonc,
+      style=jsonstyle
+    }
     
     % 重新定义所有代码环境，添加外框和防溢出
     \tcbuselibrary{breakable,skins}
     
-    % Shaded环境（主要代码块）
+    % 简化的代码块样式设置
+    % 通过listings包为不同语言设置背景色
+    
+    % Shaded环境（主要代码块）- 使用通用样式
     \renewenvironment{Shaded}{%
       \begin{tcolorbox}[
         enhanced,
@@ -407,14 +427,13 @@ header-includes:
 
 ```jsonc
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema\#",
   "title": "LC-DAD Spectrum Upload",
   "type": "object",
   "required": ["sample_code", "instrument_info", "timestamp", "chromatogram", "uv_spectrum"],
   "properties": {
     "sample_code": { 
       "type": "string", 
-      "pattern": "^[A-Z]{2}[0-9]{8}[A-Z0-9]{4}$",
       "description": "样本唯一编码，符合兽药检测标识规范" 
     },
     "instrument_info": {
@@ -978,6 +997,7 @@ COMMENT ON TABLE screening_results IS '筛查识别结果表，记录所有检�
   - 数据增强：添加高斯噪声、波长偏移等增强样本多样性
 
 - **模型训练**
+
   ```python
   # 示例：1D-CNN模型架构
   model = Sequential([
