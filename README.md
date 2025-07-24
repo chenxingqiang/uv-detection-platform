@@ -99,6 +99,18 @@ pandoc plan.md \
   --variable=monofont="Monaco" \
   --listings \
   -o 技术方案_表格完美版.pdf
+
+# 代码框优化版（推荐使用）
+pandoc plan.md \
+  --pdf-engine=xelatex \
+  --number-sections \
+  --variable=graphics:yes \
+  --variable=geometry:margin=2cm \
+  --variable=CJKmainfont="Source Han Serif SC" \
+  --variable=CJKsansfont="Source Han Sans SC" \
+  --variable=monofont="Monaco" \
+  --listings \
+  -o 技术方案_代码框优化版.pdf
 ```
 
 ## 🎯 通用模板使用
