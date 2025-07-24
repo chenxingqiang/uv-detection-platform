@@ -46,21 +46,29 @@ header-includes:
     % 处理代码溢出问题
     \tcbuselibrary{listings,breakable,skins}
     
-    % 定义Shaded环境（代码块）
+    % 定义代码块颜色
+    \definecolor{codebg}{RGB}{248,249,250}
+    \definecolor{codeframe}{RGB}{208,215,222}
+    \definecolor{jsonbg}{RGB}{240,248,255}
+    \definecolor{sqlbg}{RGB}{255,248,240}
+    \definecolor{pythonbg}{RGB}{248,255,240}
+    
+    % 定义Shaded环境（通用代码块）
     \newenvironment{Shaded}{%
       \begin{tcolorbox}[
         enhanced,
         breakable,
-        colback=gray!5,
-        colframe=gray!50,
-        boxrule=0.5pt,
+        colback=codebg,
+        colframe=codeframe,
+        boxrule=1pt,
         arc=3pt,
         left=8pt,
         right=8pt,
         top=8pt,
         bottom=8pt,
         before skip=10pt,
-        after skip=10pt
+        after skip=10pt,
+        width=\textwidth
       ]
     }{%
       \end{tcolorbox}
@@ -72,13 +80,79 @@ header-includes:
       \colorbox{gray!15}{\oldtexttt{\textcolor{black}{#1}}}%
     }
     
-    % 设置代码高亮 - 防止溢出
+    % 设置代码高亮环境
     \DefineVerbatimEnvironment{Highlighting}{Verbatim}{
       breaklines=true,
       breakanywhere=true,
       commandchars=\\\{\},
       fontsize=\footnotesize
     }
+    
+    % JSON代码块环境
+    \lstnewenvironment{jsoncode}{
+      \lstset{
+        language=,
+        basicstyle=\footnotesize\ttfamily,
+        backgroundcolor=\color{jsonbg},
+        frame=single,
+        frameround=tttt,
+        framerule=1pt,
+        rulecolor=\color{codeframe},
+        breaklines=true,
+        breakatwhitespace=true,
+        xleftmargin=8pt,
+        xrightmargin=8pt,
+        aboveskip=10pt,
+        belowskip=10pt,
+        showstringspaces=false
+      }
+    }{}
+    
+    % SQL代码块环境
+    \lstnewenvironment{sqlcode}{
+      \lstset{
+        language=SQL,
+        basicstyle=\footnotesize\ttfamily,
+        backgroundcolor=\color{sqlbg},
+        frame=single,
+        frameround=tttt,
+        framerule=1pt,
+        rulecolor=\color{codeframe},
+        breaklines=true,
+        breakatwhitespace=true,
+        xleftmargin=8pt,
+        xrightmargin=8pt,
+        aboveskip=10pt,
+        belowskip=10pt,
+        showstringspaces=false,
+        keywordstyle=\color{blue}\bfseries,
+        commentstyle=\color{gray},
+        stringstyle=\color{red}
+      }
+    }{}
+    
+    % Python代码块环境
+    \lstnewenvironment{pythoncode}{
+      \lstset{
+        language=Python,
+        basicstyle=\footnotesize\ttfamily,
+        backgroundcolor=\color{pythonbg},
+        frame=single,
+        frameround=tttt,
+        framerule=1pt,
+        rulecolor=\color{codeframe},
+        breaklines=true,
+        breakatwhitespace=true,
+        xleftmargin=8pt,
+        xrightmargin=8pt,
+        aboveskip=10pt,
+        belowskip=10pt,
+        showstringspaces=false,
+        keywordstyle=\color{blue}\bfseries,
+        commentstyle=\color{gray},
+        stringstyle=\color{red}
+      }
+    }{}
     
     % 重新定义所有代码环境，添加外框和防溢出
     \tcbuselibrary{breakable,skins}
@@ -88,16 +162,16 @@ header-includes:
       \begin{tcolorbox}[
         enhanced,
         breakable,
-        colback=gray!5,
-        colframe=gray!50,
-        boxrule=0.5pt,
+        colback=codebg,
+        colframe=codeframe,
+        boxrule=1pt,
         arc=3pt,
-        left=5pt,
-        right=5pt,
-        top=5pt,
-        bottom=5pt,
-        before skip=8pt,
-        after skip=8pt,
+        left=8pt,
+        right=8pt,
+        top=8pt,
+        bottom=8pt,
+        before skip=10pt,
+        after skip=10pt,
         width=\textwidth
       ]
     }{%
@@ -111,16 +185,16 @@ header-includes:
       \begin{tcolorbox}[
         enhanced,
         breakable,
-        colback=gray!5,
-        colframe=gray!50,
-        boxrule=0.5pt,
+        colback=codebg,
+        colframe=codeframe,
+        boxrule=1pt,
         arc=3pt,
-        left=5pt,
-        right=5pt,
-        top=5pt,
-        bottom=5pt,
-        before skip=8pt,
-        after skip=8pt,
+        left=8pt,
+        right=8pt,
+        top=8pt,
+        bottom=8pt,
+        before skip=10pt,
+        after skip=10pt,
         width=\textwidth
       ]
       \footnotesize
@@ -149,7 +223,7 @@ header-includes:
     \fancyhead[C]{\textcolor{gray}{\small 非法添加药物检测系统技术方案}}
     \fancyhead[R]{\textcolor{gray}{\small 杭州图灵智能}}
     \fancyfoot[L]{\textcolor{gray}{\small 第 \thepage\ 页，共 \pageref{LastPage} 页}}
-    \fancyfoot[R]{\textcolor{gray}{\small 2024年12月}}
+    \fancyfoot[R]{\textcolor{gray}{\small 2025年7月}}
     \renewcommand{\headrulewidth}{0.4pt}
     \renewcommand{\footrulewidth}{0.4pt}
     
@@ -873,6 +947,7 @@ COMMENT ON TABLE screening_results IS '筛查识别结果表，记录所有检�
 
 ### 2. 数据安全与合规
 **分级分类**
+
 | 数据级别 | 定义 | 加密要求 | 访问控制 |
 |---------|------|---------|---------|
 | L1 公开 | 不敏感数据 | 可选 | 公开可读 |
@@ -886,6 +961,7 @@ COMMENT ON TABLE screening_results IS '筛查识别结果表，记录所有检�
   - 数据脱敏：对敏感字段进行掩码或哈希处理
 
 ### 3. 数据生命周期管理
+
 | 阶段 | 存储策略 | 保留期限 | 处理方式 |
 |------|---------|---------|---------|
 | 热数据 | 高性能SSD | 3个月 | 实时访问 |
@@ -1015,6 +1091,7 @@ model:
 ### **实际样本验证计划**
 
 #### **样本来源与分布**
+
 | 样本类型 | 数量 | 来源 | 验证目标 |
 |---------|------|------|----------|
 | 兽药制剂 | 500 | 3省市监管机构 | 常规监管样本验证 |
