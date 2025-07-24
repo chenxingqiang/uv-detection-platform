@@ -44,6 +44,7 @@ uv-detection-platform/
 - **Pandoc 2.19+**
 - **XeLaTeX** (TeX Live 2022+)
 - **Node.js 16+** (用于Mermaid图表)
+- **PyYAML** (用于配置文件解析)
 
 ### 安装依赖
 
@@ -59,6 +60,9 @@ npm install -g @mermaid-js/mermaid-cli
 
 # 安装Pandoc过滤器
 pipx install pandoc-mermaid-filter
+
+# 安装Python依赖
+pip install PyYAML
 ```
 
 ### 生成PDF文档
@@ -85,6 +89,59 @@ pandoc plan.md \
   --variable=monofont="Monaco" \
   --listings \
   -o 技术方案_专业版.pdf
+```
+
+## 🎯 通用模板使用
+
+### 快速生成配置文件
+
+```bash
+# 生成项目配置模板
+python template_generator.py --generate-config
+
+# 这将创建 project_config.yaml 文件
+```
+
+### 使用配置文件生成文档
+
+```bash
+# 1. 编辑配置文件
+vim project_config.yaml
+
+# 2. 生成具体的提示词文档
+python template_generator.py --config project_config.yaml --output 我的项目提示词.md
+
+# 3. 验证配置完整性
+python template_generator.py --validate project_config.yaml
+```
+
+### 交互式配置模式
+
+```bash
+# 交互式填写变量
+python template_generator.py --interactive --output 交互生成的提示词.md
+```
+
+### 配置文件示例
+
+```yaml
+# 基础信息
+原始领域: "区块链金融"
+目标领域: "AI驱动的智能合约"
+原始文档名: "blockchain_plan"
+目标文档名: "ai_contract_target"
+
+# 公司信息
+公司全称: "XX科技有限公司"
+公司简称: "XX科技"
+logo文件名: "company_logo.png"
+文档日期: "2025年8月"
+
+# 技术栈
+原始技术栈: "传统区块链"
+目标技术栈: "AI+区块链融合"
+原始核心技术: "智能合约"
+目标核心技术: "AI驱动智能合约"
 ```
 
 ## 📖 技术方案亮点
