@@ -100,8 +100,9 @@ pandoc plan.md \
   --listings \
   -o 技术方案_表格完美版.pdf
 
-# 代码框优化版（推荐使用）
+# 完整版 - 支持Mermaid图表（最佳选择）
 pandoc plan.md \
+  --filter pandoc-mermaid \
   --pdf-engine=xelatex \
   --number-sections \
   --variable=graphics:yes \
@@ -110,7 +111,7 @@ pandoc plan.md \
   --variable=CJKsansfont="Source Han Sans SC" \
   --variable=monofont="Monaco" \
   --listings \
-  -o 技术方案_代码框优化版.pdf
+  -o 技术方案_完整版.pdf
 ```
 
 ## 🎯 通用模板使用
