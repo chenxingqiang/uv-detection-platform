@@ -1,0 +1,20 @@
+# Backend Framework
+fastapi
+uvicorn[standard]
+
+# Database
+psycopg2-binary
+sqlalchemy
+
+# Data Processing
+pandas
+dask[complete]
+pyarrow
+
+# Machine Learning
+scikit-learn
+mlflow
+bentoml
+
+# Messaging
+kafka-python
